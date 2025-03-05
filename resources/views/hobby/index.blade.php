@@ -23,18 +23,19 @@
         <div class="pt-5 d-flex justify-content-between">
             <div class="col">
                 <h1>Data Hobby</h1>
-                <p>Table Hobby</p>
+
             </div>
         </div>
 
         <div class="row">
-            <div class="col-12">
-                <a href="{{ route('hobby.create') }}" class="btn btn-success w">Create New Hobby</a>
-            </div>
-
+            
             <div class="col-12 mt-5">
-                <table class="table">
-                    <thead >
+                <table class="table border table-striped">
+                    <div class="d-flex justify-content-between bg-body-secondary rounded">
+                        <h4 class=" mb-4 mt-4" style="margin-left: 2rem">Table Hobby</h4>
+                        <a href="{{ route('hobby.create') }}" class="btn btn-success mb-4 mt-4" style="margin-right: 3rem">Create Hobby <i class=" bi bi-plus"></i></a>
+                    </div>
+                    <thead>
                         <th>No</th>
                         <th>Name</th>
                         <th>Action</th>
@@ -49,15 +50,16 @@
                             <td style="width: 85%">
                                 {{ $hobby->name }}
                             </td>
-                            <td class="d-flex gap-3" style="width: 25%">
-                                <a class="btn btn-primary" href="{{ route('hobby.edit', $hobby->id) }}">Edit</a>
-                                a
-                                <form action="{{ route('hobby.destroy', $hobby->id) }} " method="POST" >
-                                    @method("DELETE")
-                                    @csrf
-                                    <button type="submit" class="btn btn-danger"> Hapus </button>
-                                </form>
-
+                            <td  style="width: 35%">
+                                <div class="d-flex gap-3">
+                                    <a class="text-primary fs-4" href="{{ route('hobby.show', $hobby->id) }}"><i class="bi bi-eye-fill"></i></a>
+                                    <a class="text-warning fs-4" href="{{ route('hobby.edit', $hobby->id) }}"><i class="bi bi-pencil-fill"></i></a>
+                                    <form action="{{ route('hobby.destroy', $hobby->id) }} " method="POST" >
+                                        @method("DELETE")
+                                        @csrf
+                                        <button type="submit" class="text-danger fs-4 border-0 bg-light"> <i class="bi bi-trash-fill"></i> </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                         @endforeach
