@@ -58,6 +58,18 @@
 
                     </div>
 
+                    <div class="form-group mt-3">
+                        <label>Pilih hobby</label>
+                        <br>
+                        @foreach ($hobbies as $hobby)
+                        <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                            <input type="checkbox" name="hobbies[]" value="{{ $hobby->id }}" class="btn-check" id="{{ $hobby->name }}" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="{{ $hobby->name }}">{{ $hobby->name }}</label>
+                        </div>
+                            {{-- <input type="checkbox"  name="hobbies" value="{{ $hobby->id }}" id="{{ $hobby->name }}">
+                            <label for="{{ $hobby->name }}">{{ $hobby->name }}</label> --}}
+                        @endforeach
+                    </div>
                     
                     <footer class="mt-4">
                         <button type="submit"  class="btn btn-success">Create</button>

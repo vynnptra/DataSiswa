@@ -30,7 +30,7 @@
         <div class="row">
             
             <div class="col-12 mt-5">
-                <table class="table border table-striped">
+                <table class="table border table-striped ">
                     <div class="d-flex justify-content-between bg-body-secondary rounded">
                         <h4 class=" mb-4 mt-4" style="margin-left: 2rem">Table Siswa</h4>
                         <a href="{{ route('siswa.create') }}" class="btn btn-success mb-4 mt-4" style="margin-right: 3rem">Create Siswa <i class=" bi bi-plus"></i></a>
@@ -40,6 +40,7 @@
                         <th>Name</th>
                         <th>Nisn</th>
                         <th>Telepon</th>
+                        <th>Hobbies</th>
                         <th>Action</th>
                     </thead>
                     <tbody>
@@ -52,11 +53,14 @@
                             <td style="width: 25%">
                                 {{ $siswa->nama }}
                             </td>
-                            <td style="width: 30%">
+                            <td style="width: 20%">
                                 {{ !empty($siswa->nisn->nisn) ? $siswa->nisn->nisn : 'tidak memiliki nisn' }}
                             </td>
-                            <td style="width: 85%" class="overflow-x-auto">
+                            <td style="width: 25%" class="overflow-x-auto">
                                 {{ $siswa->phoneNumbers->isNotEmpty() ? $siswa->phoneNumbers->pluck('phone_number')->implode(', ') : 'tidak memiliki nomor telepon' }}
+                            </td>
+                            <td  style="width: 85%">
+                                {{ $siswa->hobbies->isNotEmpty() ? $siswa->hobbies->pluck('name')->implode(', ') : 'tidak memiliki hobby'}}
                             </td>
                             <td  style="width: 35%">
                                 <div class="d-flex gap-3">

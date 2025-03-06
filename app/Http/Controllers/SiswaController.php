@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Hobby;
 use App\Models\Nisn;
 use App\Models\Siswa;
 use App\Models\PhoneNumber;
+use App\Models\SiswaHobby;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -16,7 +18,7 @@ class SiswaController extends Controller
     public function index()
     {
 
-        $siswas = Siswa::paginate(5);
+        $siswas = Siswa::with('hobbies')->paginate(5);
 
         return view('siswa.index', ['siswas' => $siswas]);
     }
@@ -26,7 +28,9 @@ class SiswaController extends Controller
      */
     public function create()
     {
-        return view('siswa.create');
+        $hobbies = Hobby::all();
+
+        return view('siswa.create', compact('hobbies'));
     }
 
     /**
@@ -39,6 +43,7 @@ class SiswaController extends Controller
             'nisn' => 'required|min:10',
             'phone_number' => 'required|array|min:1', 
             'phone_number.*' => 'distinct|unique:phone_numbers,phone_number', 
+            'hobbies' => 'required|array|min:1',
         ], [
             'nama.required' => 'Nama siswa harus diisi',
             'nama.min' => 'Nama siswa minimal 3 karakter',
@@ -47,6 +52,7 @@ class SiswaController extends Controller
             'phone_number.required' => 'Minimal 1 nomor telepon',
             'phone_number.*.distinct' => 'Nomor telepon tidak boleh sama',
             'phone_number.*.unique' => 'Nomor telepon sudah ada',
+            'hobbies.required' => 'Minimal 1 hobi',
         ]);
 
         $siswa = Siswa::create([
@@ -63,6 +69,13 @@ class SiswaController extends Controller
             PhoneNumber::create([
                 'phone_number' => $phone,
                 'siswa_id' => $siswa->id
+            ]);
+        }
+
+        foreach ($validate['hobbies'] as $hobby) {
+            SiswaHobby::create([
+                'siswa_id' => $siswa->id,
+                'hobby_id' => $hobby
             ]);
         }
 
@@ -85,8 +98,9 @@ class SiswaController extends Controller
     public function edit(string $id)
     {
         $siswa = Siswa::with('phoneNumbers')->findOrFail($id);
+        $hobbies = Hobby::all();
 
-        return view('siswa.edit', ['siswa' => $siswa]);
+        return view('siswa.edit', ['siswa' => $siswa, 'hobbies' => $hobbies]);
     }
 
     /**
@@ -104,7 +118,10 @@ class SiswaController extends Controller
             'phone_number.*' => [
                 'distinct',
                 Rule::unique('phone_numbers', 'phone_number')->ignore($siswa->id, 'siswa_id'),
-]
+            ],
+            'hobbies' => 'required|array|min:1',
+        
+
         ], [
             'nama.required' => 'Nama siswa harus diisi',
             'nama.min' => 'Nama siswa minimal 3 karakter',
@@ -113,6 +130,7 @@ class SiswaController extends Controller
             'phone_number.required' => 'Minimal 1 nomor telepon',
             'phone_number.*.distinct' => 'Nomor telepon tidak boleh sama',
             'phone_number.*.unique' => 'Nomor telepon sudah ada',
+            'hobbies.required' => 'Minimal 1 hobi',
         ]);
 
         $siswa->update([
@@ -132,6 +150,15 @@ class SiswaController extends Controller
             'siswa_id' => $id
             ]);
         };
+
+        SiswaHobby::where('siswa_id', '=', $id)->delete();
+
+        foreach ($validate['hobbies'] as $hobby) {
+            SiswaHobby::create([
+                'siswa_id' => $id,
+                'hobby_id' => $hobby
+            ]);
+        }
 
 
         // dd($request);

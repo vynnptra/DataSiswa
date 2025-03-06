@@ -15,4 +15,8 @@ class Siswa extends Model
     public function phoneNumbers(){
         return $this->hasMany(PhoneNumber::class, 'siswa_id', 'id');
     }
+
+    public function hobbies() {
+        return $this->belongsToMany(Hobby::class, 'siswa_hobbies', 'siswa_id', 'hobby_id');
+    }
 }
