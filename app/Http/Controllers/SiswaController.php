@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Nisn;
 use App\Models\Siswa;
+use App\Models\PhoneNumber;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class SiswaController extends Controller
 {
@@ -14,9 +16,9 @@ class SiswaController extends Controller
     public function index()
     {
 
-        $nisn = Nisn::paginate(5);
+        $siswas = Siswa::paginate(5);
 
-        return view('siswa.index', ['nisns' => $nisn]);
+        return view('siswa.index', ['siswas' => $siswas]);
     }
 
     /**
@@ -32,24 +34,37 @@ class SiswaController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validate = $request->validate([
             'nama' => 'required|min:3',
-            'nisn' => 'required|min:10'
+            'nisn' => 'required|min:10',
+            'phone_number' => 'required|array|min:1', 
+            'phone_number.*' => 'distinct|unique:phone_numbers,phone_number', 
         ], [
             'nama.required' => 'Nama siswa harus diisi',
             'nama.min' => 'Nama siswa minimal 3 karakter',
             'nisn.required' => 'NISN siswa harus diisi',
-            'nisn.min' => 'NISN siswa minimal 10 digit'
+            'nisn.min' => 'NISN siswa minimal 10 digit',
+            'phone_number.required' => 'Minimal 1 nomor telepon',
+            'phone_number.*.distinct' => 'Nomor telepon tidak boleh sama',
+            'phone_number.*.unique' => 'Nomor telepon sudah ada',
         ]);
 
         $siswa = Siswa::create([
-            'nama' => $request->nama
+            'nama' => $validate['nama']
         ]);
 
         Nisn::create([
-            'nisn' => $request->nisn,
+            'nisn' => $validate['nisn'],
             'siswa_id' => $siswa->id
         ]);
+
+
+        foreach ($validate['phone_number'] as  $phone) {
+            PhoneNumber::create([
+                'phone_number' => $phone,
+                'siswa_id' => $siswa->id
+            ]);
+        }
 
         return redirect()->route('siswa.index')->with('success', 'Siswa berhasil ditambahkan');
     }
@@ -59,9 +74,9 @@ class SiswaController extends Controller
      */
     public function show(string $id)
     {
-        $nisn = Nisn::findOrFail($id);
+        $siswas = Siswa::findOrFail($id);
 
-        return view('siswa.show', ['nisn' => $nisn]);
+        return view('siswa.show', ['siswas' => $siswas]);
     }
 
     /**
@@ -69,9 +84,9 @@ class SiswaController extends Controller
      */
     public function edit(string $id)
     {
-        $nisn = Nisn::findOrFail($id);
+        $siswa = Siswa::with('phoneNumbers')->findOrFail($id);
 
-        return view('siswa.edit', ['nisn' => $nisn]);
+        return view('siswa.edit', ['siswa' => $siswa]);
     }
 
     /**
@@ -82,24 +97,42 @@ class SiswaController extends Controller
 
         $siswa = Siswa::findOrFail($id);
 
-        $request->validate([
+        $validate = $request->validate([
             'nama' => 'required|min:3',
-            'nisn' => 'required|min:10'
+            'nisn' => 'required|min:10',
+            'phone_number' => 'required|array|min:1', 
+            'phone_number.*' => [
+                'distinct',
+                Rule::unique('phone_numbers', 'phone_number')->ignore($siswa->id, 'siswa_id'),
+]
         ], [
             'nama.required' => 'Nama siswa harus diisi',
             'nama.min' => 'Nama siswa minimal 3 karakter',
             'nisn.required' => 'NISN siswa harus diisi',
-            'nisn.min' => 'NISN siswa minimal 10 digit'
+            'nisn.min' => 'NISN siswa minimal 10 digit',
+            'phone_number.required' => 'Minimal 1 nomor telepon',
+            'phone_number.*.distinct' => 'Nomor telepon tidak boleh sama',
+            'phone_number.*.unique' => 'Nomor telepon sudah ada',
         ]);
 
         $siswa->update([
-            'nama' => $request->nama
+            'nama' => $validate['nama']
         ]);
 
-        Nisn::where('siswa_id', '=', $request->siswa_id)->update([
-            'nisn' => $request->nisn
+        Nisn::where('siswa_id', '=', $id)->update([
+            'nisn' => $validate['nisn']
         ]);
-   
+
+
+        PhoneNumber::where('siswa_id', '=', $id)->delete();
+
+        foreach ($validate['phone_number'] as $phone) {
+            PhoneNumber::Create([
+            'phone_number' => $phone,
+            'siswa_id' => $id
+            ]);
+        };
+
 
         // dd($request);
 

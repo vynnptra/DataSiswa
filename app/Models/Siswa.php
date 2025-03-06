@@ -11,4 +11,8 @@ class Siswa extends Model
     public function nisn(){
         return $this->hasOne(Nisn::class, 'siswa_id', 'id');
     }
+
+    public function phoneNumbers(){
+        return $this->hasMany(PhoneNumber::class, 'siswa_id', 'id');
+    }
 }

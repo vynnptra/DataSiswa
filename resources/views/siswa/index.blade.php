@@ -39,26 +39,30 @@
                         <th>No</th>
                         <th>Name</th>
                         <th>Nisn</th>
+                        <th>Telepon</th>
                         <th>Action</th>
                     </thead>
                     <tbody>
 
-                        @foreach ($nisns as $key => $nisn)
+                        @foreach ($siswas as $key => $siswa)
                         <tr>
                             <td style="width: 5%">
-                                {{ $nisns->firstItem() + $key }}
+                                {{ $siswas->firstItem() + $key }}
                             </td>
-                            <td style="width: 50%">
-                                {{ $nisn->siswa->nama }}
+                            <td style="width: 25%">
+                                {{ $siswa->nama }}
                             </td>
-                            <td style="width: 85%">
-                                {{ $nisn->nisn}}
+                            <td style="width: 30%">
+                                {{ !empty($siswa->nisn->nisn) ? $siswa->nisn->nisn : 'tidak memiliki nisn' }}
+                            </td>
+                            <td style="width: 85%" class="overflow-x-auto">
+                                {{ $siswa->phoneNumbers->isNotEmpty() ? $siswa->phoneNumbers->pluck('phone_number')->implode(', ') : 'tidak memiliki nomor telepon' }}
                             </td>
                             <td  style="width: 35%">
                                 <div class="d-flex gap-3">
-                                    <a class="text-primary fs-4" href="{{ route('siswa.show', $nisn->siswa_id) }}"><i class="bi bi-eye-fill"></i></a>
-                                    <a class="text-warning fs-4" href="{{ route('siswa.edit', $nisn->siswa_id) }}"><i class="bi bi-pencil-fill"></i></a>
-                                    <form action="{{ route('siswa.destroy', $nisn->siswa_id) }} " method="POST" >
+                                    <a class="text-primary fs-4" href="{{ route('siswa.show', $siswa->id) }}"><i class="bi bi-eye-fill"></i></a>
+                                    <a class="text-warning fs-4" href="{{ route('siswa.edit', $siswa->id) }}"><i class="bi bi-pencil-fill"></i></a>
+                                    <form action="{{ route('siswa.destroy', $siswa->id) }} " method="POST" >
                                         @method("DELETE")
                                         @csrf
                                         <button type="submit" class="text-danger fs-4 border-0 bg-light"> <i class="bi bi-trash-fill"></i> </button>
@@ -69,7 +73,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                {{ $nisns->links() }}
+                {{ $siswas->links() }}
             </div>
         </div>
 
