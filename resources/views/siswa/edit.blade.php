@@ -25,6 +25,7 @@
               Edit Siswa
             </div>
             <div class="card-body">
+{{-- @dd($siswa) --}}
               
                 <form action="{{ route('siswa.update', $nisn->siswa_id) }}" method="POST">
                     @method('PUT')
