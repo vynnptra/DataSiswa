@@ -1,108 +1,98 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Edit Siswa</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-</head>
-<body >
 
-    <div class="position-relative" style="top: 17rem">
+@extends('layouts.app')
 
-        <div class="card position-absolute  start-50 translate-middle " style="margin-top: 10rem">
-            @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                    <span class="text-danger">{{ $error }}</span>
-                    @endforeach
-                </ul>
+@section('content')
+
+<x-form-validation>
+    <x-slot:title>Edit Siswa</x-slot:title>
+    <form class="space-y-4" id="typeValidation" method="POST" action="{{ route('siswa.update', $siswa->id) }}">
+        @csrf
+        @method('PUT')
+        <div class="grid md:grid-cols-2 gap-7">
+          <div class="input-area">
+            <label for="name" class="form-label">Nama Siswa</label>
+            <input id="name" name="nama" type="text" value="{{ !empty(old('nama')) ? old('nama') : $siswa->nama }}" class="form-control" placeholder="Nama Siswa">
+            @if ($errors->has('nama'))
+            <p class=" text-red-500 text-sm">{{ $errors->first('nama') }}</p>
+    @endif
+          </div>
+          <div class="input-area">
+            <label for="number" class="form-label">Nisn</label>
+            <input type="number" class="form-control" id="nisn" name="nisn" value="{{ !empty(old('nisn')) ? old('nisn') : $siswa->nisn->nisn }}" style=" width: 40rem;" >
+            @if ($errors->has('nisn'))
+                    <p class=" text-red-500 text-sm">{{ $errors->first('nisn') }}</p>
+            @endif
+          </div>
+
+          <div class="input-area" id="phoneInput">
+            <label for="number" class="form-label">Telepon</label>
+            <button onclick="addInput()" type="button" class="btn btn-primary" style=" padding-left: 1rem; padding-right: 1rem;"> Tambah + </button>
+           
+            @foreach ($siswa->phoneNumbers as $phone)    
+            <div class="flex gap-2 mb-2" id="input-group" >
+                <input id="number" name="phone_number[]" value="{{$phone->phone_number}}" type="text" class="form-control" placeholder="Enter Number only">
+                <button type="button" class="btn btn-danger" onclick=" this.parentElement.remove() ">-</button>
             </div>
-        @endif
-            <div class="card-header">
-              Edit Siswa
-            </div>
-            <div class="card-body">
-
-                <form action="{{ route('siswa.update', $siswa->id) }}" method="POST" >
-                    @method('PUT')
-                    @csrf
-
-                    <div class="form-group">
-                        <label for="name">Siswa Name</label>
-                        <input type="text" class="form-control" value="{{ $siswa->nama }}" id="name" name="nama" style=" width: 40rem;" >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="nisn">Nisn</label>
-                        <input type="number" class="form-control" value="{{ $siswa->nisn->nisn }}" id="nisn" name="nisn" style=" width: 40rem;" >
-                    </div>
-
-                    <div class="form-group mt-4" id="phoneInput">
-                        <label for="phone" style="margin-right: 1rem">Nomer Telepon</label>
-                        <button onclick="addInput()" type="button" class="btn btn-primary" style=" padding-left: 1rem; padding-right: 1rem;"> Tambah + </button>
-                        @foreach ($siswa->phoneNumbers as $phone)              
-                        <div class="d-flex gap-2 mb-2" id="input-group" >
-                            <input type="number" class="form-control" value="{{ $phone->phone_number }}" id="phone" name="phone_number[]" style="width: 40rem">
-                            <button onclick="this.parentElement.remove()" type="button" class="btn btn-danger"> - </button>
-                        </div>
-                        @endforeach
-                    </div>
-
-                    <div class="form-group mt-3">
-                        <label>Pilih hobby</label>
-                        <br>
-                        @foreach ($hobbies as $hobby)
-                        <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
-                            <input type="checkbox" name="hobbies[]" value="{{ $hobby->id }}" class="btn-check" id="{{ $hobby->name }}" autocomplete="off" {{$siswa->hobbies->pluck('id')->contains($hobby->id) ? 'checked' : '' }}>
-                            <label class="btn btn-outline-primary" for="{{ $hobby->name }}">{{ $hobby->name }}</label>
-                        </div>
-                        @endforeach
-                    </div>
+            @endforeach
 
 
-                    
-                    <footer class="mt-4">
-                        <button type="submit"  class="btn btn-success">Update</button>
-                        <a href="{{ Route('siswa.index') }}" class="btn btn-secondary">Cancel</a>
-                    </footer>
-                </form>
-            </div>
+            @if ($errors->has('phone_number') || $errors->has('phone_number*'))
+            <p class=" text-red-500 text-sm">{{ $errors->first('phone_number') }}</p>
+            @endif
         </div>
-    </div>
 
+        <div class="mt-3">
+            <p class="text-slate-900 dark:text-white">Pilih hobby</p>
+            <div class="grid grid-cols-2">
 
-    <script src="ttps://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
+                @foreach ($hobbies as $hobby)
+                <div class="checkbox-area primary-checkbox mr-2 sm:mr-4 mt-2">
+                    <label class="inline-flex items-center cursor-pointer">
+                      <input type="checkbox" class="hidden" name="hobbies[]" value="{{ $hobby->id }}" {{ $siswa->hobbies->pluck('id')->contains($hobby->id) ? 'checked' : ''  }}>
+                      <span class="h-4 w-4 border flex-none border-slate-100 dark:border-slate-800 rounded inline-flex ltr:mr-3 rtl:ml-3 relative transition-all duration-150 bg-slate-100 dark:bg-slate-900">
+                                <img src="assets/images/icon/ck-white.svg" alt="" class="h-[10px] w-[10px] block m-auto opacity-0"></span>
+                      <span class="text-primary-500 dark:text-slate-400 text-sm leading-6 capitalize">{{ $hobby->name }}</span>
+                    </label>
+                  </div>
+                @endforeach
+            </div>
+            @if ($errors->has('hobbies'))
+                <p class=" text-red-500 text-sm">{{ $errors->first('hobbies') }}</p>
+            @endif
+        </div>
 
-        function addInput(){
-            let container = document.getElementById('phoneInput');
-            let div = document.createElement('div');
-            div.classList.add('d-flex', 'gap-2', 'mb-2');
+        </div>
+        <button type="submit" class="btn flex justify-center btn-success">Submit</button>
+      </form>
+</x-form-validation>
 
-            let input = document.createElement('input');
-            input.type = 'number';
-            input.name = 'phone_number[]';
-            input.classList.add('form-control');
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function addInput(value = '') {
+        let container = document.getElementById('phoneInput');
+        let div = document.createElement('div');
+        div.classList.add('flex', 'gap-2', 'mb-2')
+        
+        let input = document.createElement('input');
+        input.type = 'number';
+        input.classList.add('form-control');
+        input.name = 'phone_number[]'
+        input.value = value;
 
-            let btnMinus = document.createElement('button')
-            btnMinus.type = 'button';
-            btnMinus.classList.add('btn', 'btn-danger');
-            btnMinus.textContent = '-';
-            btnMinus.onclick = function () {
-                div.remove();
+        let btnMinus = document.createElement('button');
+        btnMinus.type = 'button';
+        btnMinus.classList.add('btn', 'btn-danger');
+        btnMinus.textContent = '-';
+        btnMinus.onclick = function () {
+            div.remove();
+        };
 
-            }
+        div.appendChild(input);
+        div.appendChild(btnMinus);
+        container.appendChild(div);
+    
+    }
 
-            div.appendChild(input);
-            div.appendChild(btnMinus);
-            container.appendChild(div);
-
-        }
-
-
-    </script>
-</body>
-</html>
+    oldPhoneNumbers.forEach(number => addInput(number));
+</script>
+@endsection

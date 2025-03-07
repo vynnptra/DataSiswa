@@ -1,92 +1,84 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Create Siswa</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-</head>
-<body>
-    <div class="position-relative" style="top: 17rem">
-        <div class="card position-absolute  start-50 translate-middle mt-4">
-            @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                    <span class="text-danger">{{ $error }}</span>
-                    @endforeach
-                </ul>
-            </div>
+
+    @extends('layouts.app')
+
+    @section('content')
+
+    <x-form-validation>
+
+        <x-slot:title>Create Siswa</x-slot:title>
+
+        <form class="space-y-4" id="typeValidation" method="POST" action="{{ route('siswa.store') }}">
+            @csrf
+            @method('POST')
+            <div class="grid md:grid-cols-2 gap-7">
+              <div class="input-area">
+                <label for="name" class="form-label">Nama Siswa</label>
+                <input id="name" name="nama" type="text" class="form-control" placeholder="Nama Siswa">
+                @if ($errors->has('nama'))
+                <p class=" text-red-500 text-sm">{{ $errors->first('nama') }}</p>
         @endif
-            <div class="card-header">
-            Create New Siswa
+              </div>
+              <div class="input-area">
+                <label for="number" class="form-label">Nisn</label>
+                <input type="number" class="form-control" id="nisn" name="nisn" value="{{ old('nisn') }}" style=" width: 40rem;" >
+                @if ($errors->has('nisn'))
+                        <p class=" text-red-500 text-sm">{{ $errors->first('nisn') }}</p>
+                @endif
+              </div>
+
+              <div class="input-area" id="phoneInput">
+                <label for="number" class="form-label">Telepon</label>
+                <button onclick="addInput()" type="button" class="btn btn-primary" style=" padding-left: 1rem; padding-right: 1rem;"> Tambah + </button>
+                @if (old('phone_number'))
+
+                @foreach (old('phone_number') as $key => $phone)
+                    <div class="flex gap-2 mb-2" id="input-group" >
+                        <input id="number" name="phone_number[]" value="{{$phone}}" type="text" class="form-control" placeholder="Enter Number only">
+                        <button type="button" class="btn btn-danger" onclick=" this.parentElement.remove() ">-</button>
+                    </div>
+                @endforeach
+                @else
+
+                <div class="flex gap-2 mb-2" style="display: flex" id="input-group"></div>
+
+                @endif
+
+                @if ($errors->has('phone_number') || $errors->has('phone_number*'))
+                <p class=" text-red-500 text-sm">{{ $errors->first('phone_number') }}</p>
+                @endif
             </div>
-            <div class="card-body">
-            
-                <form action="{{ route('siswa.store') }}" method="POST">
-                    @csrf
 
-                    <div class="form-group">
-                        <label for="name">Nama Siswa</label>
-                        <input type="text" class="form-control" id="name" name="nama" value="{{ old('nama') }}" style=" width: 40rem;" >
-                    </div>
+            <div class="mt-3">
+                <p class="text-slate-900 dark:text-white">Pilih hobby</p>
+                <div class="grid grid-cols-2">
 
-                    <div class="form-group">
-                        <label for="nisn">Nisn</label>
-                        <input type="number" class="form-control" id="nisn" name="nisn" value="{{ old('nisn') }}" style=" width: 40rem;" >
-                    </div>
-
-                    <div class="form-group mt-3" id="phoneInput">
-                        <label for="phone" style="margin-right: 1rem">Nomer Telepon</label>
-                        <button onclick="addInput()" type="button" class="btn btn-primary" style=" padding-left: 1rem; padding-right: 1rem;"> Tambah + </button>
-
-                        @if (old('phone_number'))
-
-                        @foreach (old('phone_number') as $key => $phone)
-                        <div class="d-flex gap-2 mb-2" id="input-group" >
-                            <input type="number" class="form-control" name="phone_number[]" value="{{$phone}}" >
-                            <button type="button" class="btn btn-danger" onclick=" this.parentElement.remove() ">-</button>
-                        </div>
-                        @endforeach
-                        
-                        @else
-
-                        <div class="d-flex gap-2 mb-2" id="input-group"></div>
-
-                        @endif
-
-                    </div>
-
-                    <div class="form-group mt-3">
-                        <label>Pilih hobby</label>
-                        <br>
-                        @foreach ($hobbies as $hobby)
-                        <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
-                            <input type="checkbox" name="hobbies[]" value="{{ $hobby->id }}" class="btn-check" id="{{ $hobby->name }}" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="{{ $hobby->name }}">{{ $hobby->name }}</label>
-                        </div>
-                            {{-- <input type="checkbox"  name="hobbies" value="{{ $hobby->id }}" id="{{ $hobby->name }}">
-                            <label for="{{ $hobby->name }}">{{ $hobby->name }}</label> --}}
-                        @endforeach
-                    </div>
-                    
-                    <footer class="mt-4">
-                        <button type="submit"  class="btn btn-success">Create</button>
-                        <a href="{{ Route('siswa.index') }}" class="btn btn-secondary">Cancel</a>
-                    </footer>
-                </form>
+                    @foreach ($hobbies as $hobby)
+                    <div class="checkbox-area primary-checkbox mr-2 sm:mr-4 mt-2">
+                        <label class="inline-flex items-center cursor-pointer">
+                          <input type="checkbox" class="hidden" name="hobbies[]" value="{{ $hobby->id }}">
+                          <span class="h-4 w-4 border flex-none border-slate-100 dark:border-slate-800 rounded inline-flex ltr:mr-3 rtl:ml-3 relative transition-all duration-150 bg-slate-100 dark:bg-slate-900">
+                                    <img src="assets/images/icon/ck-white.svg" alt="" class="h-[10px] w-[10px] block m-auto opacity-0"></span>
+                          <span class="text-primary-500 dark:text-slate-400 text-sm leading-6 capitalize">{{ $hobby->name }}</span>
+                        </label>
+                      </div>
+                    @endforeach
+                </div>
+                @if ($errors->has('hobbies'))
+                    <p class=" text-red-500 text-sm">{{ $errors->first('hobbies') }}</p>
+                @endif
             </div>
-        </div>
-    </div>
 
+            </div>
+            <button class="btn flex justify-center btn-success">Create</button>
+          </form>
+    </x-form-validation>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         function addInput(value = '') {
             let container = document.getElementById('phoneInput');
             let div = document.createElement('div');
-            div.classList.add('d-flex', 'gap-2', 'mb-2')
+            div.classList.add('flex', 'gap-2', 'mb-2')
             
             let input = document.createElement('input');
             input.type = 'number';
@@ -110,5 +102,4 @@
 
         oldPhoneNumbers.forEach(number => addInput(number));
     </script>
-</body>
-</html>
+    @endsection
