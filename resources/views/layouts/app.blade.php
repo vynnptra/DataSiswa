@@ -10,20 +10,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- BEGIN: Theme CSS-->
   <link rel="stylesheet" href="{{ asset('assets/css/rt-plugins.css') }}">
   <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
-  <!-- End : Theme CSS-->
   <script src="{{ asset('assets/js/settings.js') }}" sync></script>
 </head>
 
 <body class=" font-inter dashcode-app" id="body_class">
-<!-- [if IE]> <p class="browserupgrade"> You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security. </p> <![endif] -->
   <main class="app-wrapper">
 
-    @if (!Route::is(['siswa.create', 'siswa.edit', 'hobby.create', 'hobby.edit']))
     <x-sidebar></x-sidebar>
-    @endif
 
     @yield('content')
    
