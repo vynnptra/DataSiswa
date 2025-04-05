@@ -24,9 +24,8 @@
    
   </main>
 
-  @if (!Route::is(['siswa.create', 'siswa.edit', 'hobby.create', 'hobby.edit']))
   <x-footer></x-footer>
-  @endif
+
   <!-- scripts -->
   <script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
   <script src="{{ asset('assets/js/rt-plugins.js') }}"></script>

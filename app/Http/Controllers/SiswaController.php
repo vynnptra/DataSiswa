@@ -89,7 +89,7 @@ class SiswaController extends Controller
     {
         $siswas = Siswa::findOrFail($id);
 
-        return view('siswa.show', ['siswas' => $siswas]);
+        return view('siswa.show', ['siswa' => $siswas]);
     }
 
     /**

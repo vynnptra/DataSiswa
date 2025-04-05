@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{{-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -30,4 +30,21 @@
         
     <script src="ttps://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>
+</html> --}}
+
+
+@extends('layouts.app')
+
+@section('content')
+<x-detail>
+    <x-slot:redirect>
+        {{ route('hobby.index') }}
+    </x-slot:redirect>
+
+    <h3 class="card-title text-slate-900 dark:text-white my-7">{{ $hobby->name }}</h3>
+</x-detail>
+@endsection
+
+
+
+
