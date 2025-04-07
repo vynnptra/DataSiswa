@@ -4,7 +4,7 @@
 @section('content')
 <x-detail>
     <x-slot:redirect>
-        {{ route('hobby.index') }}
+        {{ route('hobby') }}
     </x-slot:redirect>
 
     <h3 class="card-title text-slate-900 dark:text-white my-7">{{ $hobby->name }}</h3>

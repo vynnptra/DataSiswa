@@ -4,7 +4,7 @@
 @section('content')
 <x-detail>
     <x-slot:redirect>
-        {{ route('siswa.index') }}
+        {{ route('siswa') }}
     </x-slot:redirect>
 
 
