@@ -1,17 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Detail {{ $hobbys->name }}</title>
-</head>
-<body>
-    <div class="container">
-        <h1>Detail {{ $hobbys->name }}</h1>
+
+@extends('layouts.app')
+
+@section('content')
+<x-detail>
+    <x-slot:redirect>
+        {{ route('hobby') }}
+    </x-slot:redirect>
+
+    <h3 class="card-title text-slate-900 dark:text-white my-7">{{ $hobby->name }}</h3>
+</x-detail>
+@endsection
 
 
-        
-    </div>
-</body>
-</html>
+
+
