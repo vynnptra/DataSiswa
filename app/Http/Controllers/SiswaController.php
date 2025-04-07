@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendEmail;
 use App\Models\Hobby;
 use App\Models\Nisn;
 use App\Models\Siswa;
 use App\Models\PhoneNumber;
 use App\Models\SiswaHobby;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 
 class SiswaController extends Controller
@@ -58,12 +60,13 @@ class SiswaController extends Controller
         $siswa = Siswa::create([
             'nama' => $validate['nama']
         ]);
-
+        
         Nisn::create([
             'nisn' => $validate['nisn'],
             'siswa_id' => $siswa->id
         ]);
 
+        
 
         foreach ($validate['phone_number'] as  $phone) {
             PhoneNumber::create([
@@ -71,13 +74,24 @@ class SiswaController extends Controller
                 'siswa_id' => $siswa->id
             ]);
         }
-
+        
         foreach ($validate['hobbies'] as $hobby) {
             SiswaHobby::create([
                 'siswa_id' => $siswa->id,
                 'hobby_id' => $hobby
             ]);
         }
+        
+        $hobbies = [];
+
+        foreach ($request['hobbies'] as $id) {
+            $nama = Hobby::where('id', $id)->value('name');
+            $hobbies[] = $nama;
+        }
+
+        $data = $request->all();
+        
+        SendEmail::dispatch($data, $hobbies);
 
         return redirect()->route('siswa.index')->with('success', 'Siswa berhasil ditambahkan');
     }

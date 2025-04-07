@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\Hobby;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class UploadFile implements ShouldQueue
@@ -24,7 +25,7 @@ class UploadFile implements ShouldQueue
 
     public function handle(): void
     {
-        $sourcePath = storage_path('app/' . $this->tempPath);
+        $sourcePath = storage_path('app/private/' . $this->tempPath);
         $destination = 'hobbies/' . $this->fileName;
 
         // Streaming: buka file lalu kirim ke lokasi tujuan
@@ -42,6 +43,8 @@ class UploadFile implements ShouldQueue
 
         // Hapus file sementara
         Storage::delete($this->tempPath);
+
+        Log::info('berhasil');
     }
 }
 

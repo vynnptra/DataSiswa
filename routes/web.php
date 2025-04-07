@@ -9,11 +9,11 @@ Route::get('/', function () {
     return redirect('/hobby');
 });
 
+Route::get('/test', function () {
+    return view('mails.data-siswa');
+});
+
 Route::resource('/hobby', HobbyController::class );
 
 Route::resource('/siswa', SiswaController::class);
 
-Route::get('test', function () {
-    Test::dispatch();
-    return 'test';
-});
