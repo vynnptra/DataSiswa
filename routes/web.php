@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HobbyController;
 use App\Http\Controllers\SiswaController;
+use App\Jobs\Test;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
