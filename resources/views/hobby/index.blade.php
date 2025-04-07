@@ -23,9 +23,12 @@
                 Name
               </th>
 
+              @if(auth()->user()->hasRole(['superadmin', 'admin']))
               <th scope="col" class=" table-th " >
                 Action
               </th>
+              @endif
+
 
             </tr>
           </thead>
@@ -36,6 +39,7 @@
               <tr>
                   <td class="table-td">{{ $key + 1 }}</td>
                   <td class="table-td " style="width: 80%">{{ $hobby->name }}</td>
+                  @if(auth()->user()->hasRole(['superadmin', 'admin']))
                   <td class="table-td ">
                       <div>
                         <div class="relative">
@@ -69,6 +73,7 @@
                         </div>
                       </div>
                     </td>
+                  @endif
                 </tr>
               @endforeach
           </tbody>

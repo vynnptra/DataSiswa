@@ -79,7 +79,7 @@ class SiswaController extends Controller
             ]);
         }
 
-        return redirect()->route('siswa.index')->with('success', 'Siswa berhasil ditambahkan');
+        return redirect()->route('siswa')->with('success', 'Siswa berhasil ditambahkan');
     }
 
     /**
@@ -165,7 +165,7 @@ class SiswaController extends Controller
 
 
 
-        return redirect()->route('siswa.index')->with('success', 'Siswa berhasil diupdate');
+        return redirect()->route('siswa')->with('success', 'Siswa berhasil diupdate');
     }
 
     /**
@@ -176,7 +176,7 @@ class SiswaController extends Controller
         Siswa::find($id)->delete();
         Nisn::where('siswa_id', '=', $id)->delete();
 
-        return redirect()->route('siswa.index')->with('success', 'Siswa berhasil dihapus');
+        return redirect()->route('siswa')->with('success', 'Siswa berhasil dihapus');
 
     }
 }

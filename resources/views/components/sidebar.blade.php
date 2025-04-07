@@ -28,7 +28,7 @@
         <li class="sidebar-menu-title">PAGES</li>
         <!-- Authentication -->
         <li class="">
-          <a href="{{ route('hobby.index') }}" class="navItem">
+          <a href="{{ route('hobby') }}" class="navItem">
             <span class="flex items-center">
           <iconify-icon class=" nav-icon" icon="heroicons-outline:table"></iconify-icon>
           <span>Hobbies</span>
@@ -37,13 +37,25 @@
           </a>
         </li>
         <li class="">
-          <a href="{{ route('siswa.index') }}" class="navItem">
+          <a href="{{ route('siswa') }}" class="navItem">
             <span class="flex items-center">
-          <iconify-icon class=" nav-icon" icon="heroicons-outline:table"></iconify-icon>
-          <span>Siswa</span>
+              <iconify-icon class=" nav-icon" icon="heroicons-outline:table"></iconify-icon>
+              <span>Siswa</span>
             </span>
             <iconify-icon class="icon-arrow" icon="heroicons-outline:chevron-right"></iconify-icon>
           </a>
+        </li>
+        <li class="">
+          <form method="POST" action="{{ route('logout') }}" style="margin-left: 0.5rem; margin-top: 0.6rem;">
+            @csrf
+            <button type="submit" class="navItem" style=" justify-content: space-between; display: flex; width: 95%;">
+              <span class="flex items-center">
+                <iconify-icon class=" nav-icon" icon="heroicons-outline:logout"></iconify-icon>
+                <span>Logout</span>
+              </span>
+              <iconify-icon class="icon-arrow" icon="heroicons-outline:chevron-right"></iconify-icon>
+          </button>
+          </form>
         </li>
       </ul>
     </div>

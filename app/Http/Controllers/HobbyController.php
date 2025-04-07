@@ -40,7 +40,7 @@ class HobbyController extends Controller
 
     Hobby::create($request->all());
 
-    return redirect()->route('hobby.index');
+    return redirect()->route('hobby');
 
     }
 
@@ -77,7 +77,7 @@ class HobbyController extends Controller
 
         $find->update($request->all());
 
-        return redirect()->route('hobby.index');
+        return redirect()->route('hobby');
 
     }
 
@@ -88,6 +88,6 @@ class HobbyController extends Controller
     {
         $hobby->delete();
 
-        return redirect()->route('hobby.index');
+        return redirect()->route('hobby');
     }
 }

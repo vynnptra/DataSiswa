@@ -18,7 +18,9 @@
 <body class=" font-inter dashcode-app" id="body_class">
   <main class="app-wrapper">
 
-    <x-sidebar></x-sidebar>
+    @if (Auth::check())  
+      <x-sidebar></x-sidebar>
+    @endif
 
     @yield('content')
    
