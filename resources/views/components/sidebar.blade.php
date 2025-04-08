@@ -35,6 +35,16 @@
             </span>
             <iconify-icon class="icon-arrow" icon="heroicons-outline:chevron-right"></iconify-icon>
           </a>
+          <ul class="sidebar-submenu">
+            <li>
+              <a href="{{ route('hobby') }}">Table</a>
+            </li>
+            @can('create-hobby')          
+            <li>
+              <a href="{{ route('hobby.create') }}">Create</a>
+            </li>
+            @endcan
+          </ul>
         </li>
         <li class="">
           <a href="{{ route('siswa') }}" class="navItem">
@@ -44,6 +54,16 @@
             </span>
             <iconify-icon class="icon-arrow" icon="heroicons-outline:chevron-right"></iconify-icon>
           </a>
+          <ul class="sidebar-submenu">
+            <li>
+              <a href="{{ route('siswa') }}">Table</a>
+            </li>
+            @can('create-siswa')          
+            <li>
+              <a href="{{ route('siswa.create') }}">Create</a>
+            </li>
+            @endcan
+          </ul>
         </li>
         <li class="">
           <form method="POST" action="{{ route('logout') }}" style="margin-left: 0.5rem; margin-top: 0.6rem;">
@@ -53,7 +73,6 @@
                 <iconify-icon class=" nav-icon" icon="heroicons-outline:logout"></iconify-icon>
                 <span>Logout</span>
               </span>
-              <iconify-icon class="icon-arrow" icon="heroicons-outline:chevron-right"></iconify-icon>
           </button>
           </form>
         </li>
