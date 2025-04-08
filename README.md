@@ -19,5 +19,5 @@ This project is a learning-based Laravel 11 application that provides full CRUD 
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/vynnptra/STUDENT-MANAGEMENT-LARAVEL11.git
-cd STUDENT-MANAGEMENT-LARAVEL1
+git clone https://github.com/vynnptra/student-management-laravel1.git
+cd student-management-laravel1
